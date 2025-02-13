@@ -7,23 +7,7 @@ interface User {
   id: number
   username: string
   avatar: string
-  token?: string
-  medicalHistory: string[]
-  personalInfo?: {
-    name: string
-    age: number
-    gender: string
-    phone: string
-    emergencyContact: string
-  }
-  medicalRecords?: Array<{
-    date: string
-    type: string
-    result: string
-    doctor: string
-    prescription: string
-    nextAppointment: string
-  }>
+  token: string
 }
 
 interface AuthContextType {
@@ -82,6 +66,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setIsLoading(true)
       const response = await fetch("/api/auth/logout", {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
       })
 
       if (!response.ok) {

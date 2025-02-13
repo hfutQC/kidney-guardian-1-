@@ -1,25 +1,23 @@
-import { testUsers } from "../data/testUsers"
+import prisma from "./db"
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
 
-export interface LoginCredentials {
-  username: string
-  password: string
-}
-
-export interface AuthResponse {
-  success: boolean
-  user?: any
-  error?: string
-}
-
-export async function authenticate(credentials: LoginCredentials): Promise<AuthResponse> {
-  const user = testUsers.find((u) => u.username === credentials.username && u.password === credentials.password)
+export async function login(username: string, password: string) {
+  const user = await prisma.user.findUnique({ where: { username } })
 
   if (!user) {
-    return {
-      success: false,
-      error: "用户名或密码错误",
-    }
+    return { success: false, error: "用户名或密码错误" }
   }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password)
+
+  if (!isPasswordValid) {
+    return { success: false, error: "用户名或密码错误" }
+  }
+
+  const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET as string, {
+    expiresIn: "1d",
+  })
 
   return {
     success: true,
@@ -27,15 +25,13 @@ export async function authenticate(credentials: LoginCredentials): Promise<AuthR
       id: user.id,
       username: user.username,
       avatar: user.avatar,
-      medicalHistory: user.medicalHistory,
-      personalInfo: user.personalInfo,
-      medicalRecords: user.medicalRecords,
+      token,
     },
   }
 }
 
-export async function logout(): Promise<{ success: boolean }> {
-  // In a real application, this would handle server-side logout logic
+export async function logout() {
+  // 在实际应用中，这里可能需要处理令牌失效等逻辑
   return { success: true }
 }
 

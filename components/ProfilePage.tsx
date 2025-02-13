@@ -1,23 +1,107 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useAuth } from "../context/AuthContext"
 import styles from "../styles/ProfilePage.module.css"
 import ProfileHeader from "./ProfileHeader"
 import Image from "next/image"
 import TestResultForm from "./TestResultForm"
 
+interface MedicalRecord {
+  id: number
+  date: string
+  type: string
+  result: string
+  doctor: string
+  prescription: string
+  nextAppointment: string
+}
+
+interface DoctorInfo {
+  name: string
+  department: string
+  title: string
+  specialties: string[]
+  officeHours: string
+}
+
+interface PatientGroup {
+  id: number
+  name: string
+  memberCount: number
+  description: string
+}
+
 const ProfilePage: React.FC = () => {
   const { user } = useAuth()
   const [activeTab, setActiveTab] = useState("history")
+  const [medicalRecords, setMedicalRecords] = useState<MedicalRecord[]>([])
+  const [doctorInfo, setDoctorInfo] = useState<DoctorInfo | null>(null)
+  const [patientGroups, setPatientGroups] = useState<PatientGroup[]>([])
+
+  useEffect(() => {
+    if (user) {
+      fetchMedicalRecords()
+      fetchDoctorInfo()
+      fetchPatientGroups()
+    }
+  }, [user])
+
+  const fetchMedicalRecords = async () => {
+    try {
+      const response = await fetch("/api/medical-records", {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      })
+      if (response.ok) {
+        const data = await response.json()
+        setMedicalRecords(data.records)
+      }
+    } catch (error) {
+      console.error("Failed to fetch medical records:", error)
+    }
+  }
+
+  const fetchDoctorInfo = async () => {
+    try {
+      const response = await fetch("/api/doctor", {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      })
+      if (response.ok) {
+        const data = await response.json()
+        setDoctorInfo(data)
+      }
+    } catch (error) {
+      console.error("Failed to fetch doctor info:", error)
+    }
+  }
+
+  const fetchPatientGroups = async () => {
+    try {
+      const response = await fetch("/api/patient-groups", {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      })
+      if (response.ok) {
+        const data = await response.json()
+        setPatientGroups(data.groups)
+      }
+    } catch (error) {
+      console.error("Failed to fetch patient groups:", error)
+    }
+  }
 
   const renderHistory = () => (
     <div className={styles.historySection}>
       <h2>就诊记录</h2>
       <div className={styles.records}>
-        {user?.medicalRecords?.map((record, index) => (
-          <div key={index} className={styles.record}>
+        {medicalRecords.map((record) => (
+          <div key={record.id} className={styles.record}>
             <div className={styles.recordHeader}>
               <span className={styles.date}>{record.date}</span>
               <span className={styles.type}>{record.type}</span>
@@ -49,32 +133,38 @@ const ProfilePage: React.FC = () => {
   const renderDoctor = () => (
     <div className={styles.doctorSection}>
       <h2>责任医师</h2>
-      <div className={styles.doctorCard}>
-        <div className={styles.doctorInfo}>
-          <Image
-            src="/placeholder.svg?height=120&width=120"
-            alt="李医生"
-            width={120}
-            height={120}
-            className={styles.doctorImage}
-          />
-          <div className={styles.doctorDetails}>
-            <h3>李医生</h3>
-            <p>
-              <strong>科室：</strong>肾内科
-            </p>
-            <p>
-              <strong>职称：</strong>主任医师
-            </p>
-            <p>
-              <strong>专长：</strong>慢性肾病、肾功能衰竭、血液透析
-            </p>
-            <p>
-              <strong>门诊时间：</strong>周一至周五 9:00-17:00
-            </p>
+      {doctorInfo && (
+        <div className={styles.doctorCard}>
+          <div className={styles.doctorInfo}>
+            <Image
+              src="/placeholder.svg?height=120&width=120"
+              alt={doctorInfo.name}
+              width={120}
+              height={120}
+              className={styles.doctorImage}
+            />
+            <div className={styles.doctorDetails}>
+              <h3>{doctorInfo.name}</h3>
+              <p>
+                <strong>科室：</strong>
+                {doctorInfo.department}
+              </p>
+              <p>
+                <strong>职称：</strong>
+                {doctorInfo.title}
+              </p>
+              <p>
+                <strong>专长：</strong>
+                {doctorInfo.specialties.join(", ")}
+              </p>
+              <p>
+                <strong>门诊时间：</strong>
+                {doctorInfo.officeHours}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   )
 
@@ -82,16 +172,13 @@ const ProfilePage: React.FC = () => {
     <div className={styles.patientsSection}>
       <h2>病友圈</h2>
       <div className={styles.patientGroups}>
-        <div className={styles.group}>
-          <h3>慢性肾病互助组</h3>
-          <p>成员：128人</p>
-          <p>简介：交流慢性肾病康复经验，分享治疗心得</p>
-        </div>
-        <div className={styles.group}>
-          <h3>血透病友会</h3>
-          <p>成员：86人</p>
-          <p>简介：为血透患者提供经验分享和心理支持</p>
-        </div>
+        {patientGroups.map((group) => (
+          <div key={group.id} className={styles.group}>
+            <h3>{group.name}</h3>
+            <p>成员：{group.memberCount}人</p>
+            <p>简介：{group.description}</p>
+          </div>
+        ))}
       </div>
     </div>
   )

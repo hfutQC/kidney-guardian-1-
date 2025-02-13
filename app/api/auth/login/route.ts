@@ -1,18 +1,14 @@
 import { NextResponse } from "next/server"
-import { authenticate, type LoginCredentials } from "../../../../server/auth"
+import { login } from "../../../../server/auth"
 
 export async function POST(request: Request) {
+  const { username, password } = await request.json()
+
   try {
-    const credentials: LoginCredentials = await request.json()
-    const result = await authenticate(credentials)
-
-    if (!result.success) {
-      return NextResponse.json({ error: result.error }, { status: 401 })
-    }
-
+    const result = await login(username, password)
     return NextResponse.json(result)
   } catch (error) {
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
+    return NextResponse.json({ success: false, error: "登录失败" }, { status: 500 })
   }
 }
 
