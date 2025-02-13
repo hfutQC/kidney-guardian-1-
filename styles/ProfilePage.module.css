@@ -1,0 +1,161 @@
+.profilePage {
+  min-height: 100vh;
+  background-color: #f0f8ff;
+  padding-top: 60px;
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  gap: 20px;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+}
+
+.tab {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 8px;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #666;
+}
+
+.tab:hover {
+  background-color: #f0f8ff;
+  color: #00d6b9;
+}
+
+.tab.active {
+  background-color: #00d6b9;
+  color: white;
+}
+
+.mainContent {
+  flex-grow: 1;
+  background-color: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.historySection h2,
+.doctorSection h2,
+.patientsSection h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.record {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.recordHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.date {
+  color: #666;
+}
+
+.type {
+  color: #00d6b9;
+  font-weight: 500;
+}
+
+.recordContent p {
+  margin-bottom: 8px;
+}
+
+.doctorCard {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.doctorInfo {
+  display: flex;
+  gap: 24px;
+}
+
+.doctorImage {
+  border-radius: 8px;
+}
+
+.doctorDetails h3 {
+  color: #00d6b9;
+  margin-bottom: 16px;
+}
+
+.doctorDetails p {
+  margin-bottom: 12px;
+}
+
+.patientGroups {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.group {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.group h3 {
+  color: #00d6b9;
+  margin-bottom: 12px;
+}
+
+.group p {
+  margin-bottom: 8px;
+  color: #666;
+}
+
+.loginPrompt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 16px;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+
+  .doctorInfo {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
