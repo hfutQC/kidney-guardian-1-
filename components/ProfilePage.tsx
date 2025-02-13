@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext"
 import styles from "../styles/ProfilePage.module.css"
 import ProfileHeader from "./ProfileHeader"
 import Image from "next/image"
+import TestResultForm from "./TestResultForm"
 
 const ProfilePage: React.FC = () => {
   const { user } = useAuth()
@@ -103,6 +104,8 @@ const ProfilePage: React.FC = () => {
         return renderDoctor()
       case "patients":
         return renderPatients()
+      case "testResult":
+        return <TestResultForm />
       default:
         return null
     }
@@ -115,13 +118,13 @@ const ProfilePage: React.FC = () => {
   return (
     <div className={styles.profilePage}>
       <ProfileHeader />
-      <div className={styles.content}>
+      <div className={styles.profileContent}>
         <div className={styles.sidebar}>
           <button
             className={`${styles.tab} ${activeTab === "history" ? styles.active : ""}`}
             onClick={() => setActiveTab("history")}
           >
-            历史记录
+            就诊记录
           </button>
           <button
             className={`${styles.tab} ${activeTab === "doctor" ? styles.active : ""}`}
@@ -134,6 +137,12 @@ const ProfilePage: React.FC = () => {
             onClick={() => setActiveTab("patients")}
           >
             病友圈
+          </button>
+          <button
+            className={`${styles.tab} ${activeTab === "testResult" ? styles.active : ""}`}
+            onClick={() => setActiveTab("testResult")}
+          >
+            提交检测结果
           </button>
         </div>
         <div className={styles.mainContent}>{renderContent()}</div>

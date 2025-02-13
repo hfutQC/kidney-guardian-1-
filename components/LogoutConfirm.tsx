@@ -7,6 +7,7 @@ interface LogoutConfirmProps {
 }
 
 const LogoutConfirm: React.FC<LogoutConfirmProps> = ({ onConfirm, onCancel }) => {
+  console.log('LogoutConfirm rendered');
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>

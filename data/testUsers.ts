@@ -1,7 +1,7 @@
 export const testUsers = [
   {
     id: 1,
-    username: "张三",
+    username: "test_user",
     password: "123456",
     avatar: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/touxiang-vHEawVybBvBr9jILYDg7Q3Fbc44mUR.png",
     medicalHistory: ["2023-09-01 肾功能检查", "2023-10-15 复查", "2024-01-20 年度体检"],

@@ -1,4 +1,4 @@
-"use client"
+// components\ProfileHeader.tsx
 
 import type React from "react"
 import { useState } from "react"

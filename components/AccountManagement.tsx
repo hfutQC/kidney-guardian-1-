@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useAuth } from "../context/AuthContext"
 import { useRouter } from "next/navigation"
 import styles from "../styles/AccountManagement.module.css"
@@ -16,9 +16,15 @@ const AccountManagement: React.FC<AccountManagementProps> = ({ onClose }) => {
   const { logout } = useAuth()
   const router = useRouter()
 
-  const handleLogout = () => {
+  useEffect(() => {
+    console.log('showLogoutConfirm changed:', showLogoutConfirm)
+  }, [showLogoutConfirm])
+
+  const handleLogout = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
     setShowLogoutConfirm(true)
-    console.log('Logout button clicked, showing confirm dialog...');
+    console.log('Logout button clicked, showing confirm dialog...')
   }
 
   const confirmLogout = async () => {
@@ -39,7 +45,13 @@ const AccountManagement: React.FC<AccountManagementProps> = ({ onClose }) => {
 
   return (
     <>
-      <div className={styles.accountManagement}>
+      <div 
+        className={styles.accountManagement} 
+        onClick={e => {
+          e.preventDefault()
+          e.stopPropagation()
+        }}
+      >
         <button onClick={() => router.push("/profile")} className={styles.option}>
           账号信息
         </button>

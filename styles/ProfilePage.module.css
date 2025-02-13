@@ -1,15 +1,17 @@
 .profilePage {
   min-height: 100vh;
   background-color: #f0f8ff;
-  padding-top: 60px;
+  //position: relative;
 }
 
-.content {
+.profileContent {
+  //position: relative;/*必要吗？*/ 
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
   display: flex;
   gap: 20px;
+  padding-top: 80px; /* 为固定定位的 header 留出空间 */
 }
 
 .sidebar {
@@ -144,7 +146,7 @@
 }
 
 @media (max-width: 768px) {
-  .content {
+  .profileContent {
     flex-direction: column;
   }
 
